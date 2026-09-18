@@ -1,0 +1,12 @@
+{
+  "name": "cruises",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev -w apps/server",
+    "dev:client": "npm run dev -w apps/client",
+    "test": "npm test --workspaces --if-present"
+  }
+}
