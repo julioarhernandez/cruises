@@ -8,6 +8,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@cruises/shared": "*",
     "fastify": "^5.12.5"
   },
   "devDependencies": {

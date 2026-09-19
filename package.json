@@ -2,7 +2,8 @@
   "name": "cruises",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "dev:server": "npm run dev -w apps/server",

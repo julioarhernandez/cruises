@@ -1,5 +1,6 @@
 import Fastify from 'fastify'
-import { cruises, searchCruises, type CruiseFilters } from './cruises.js'
+import type { CruiseFilters } from '@cruises/shared'
+import { cruises, searchCruises } from './cruises.js'
 
 const searchQuerySchema = {
   type: 'object',

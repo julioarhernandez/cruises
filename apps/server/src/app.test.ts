@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { buildApp } from './app.js'
-import { cruises as allCruises, type Cruise } from './cruises.js'
+import type { Cruise } from '@cruises/shared'
+import { cruises as allCruises } from './cruises.js'
 
 const app = buildApp()
 
