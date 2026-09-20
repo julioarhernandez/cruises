@@ -63,3 +63,33 @@ h1 {
   display: block;
   font-size: 1.25rem;
 }
+
+.search {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.search label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.search input,
+.search select {
+  font: inherit;
+  font-weight: normal;
+  padding: 8px 10px;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  background: white;
+}
+
+@media (max-width: 600px) {
+  .search {
+    grid-template-columns: 1fr;
+  }
+}

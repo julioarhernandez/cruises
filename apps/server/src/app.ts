@@ -1,6 +1,6 @@
 import Fastify from 'fastify'
 import type { CruiseFilters } from '@cruises/shared'
-import { cruises, searchCruises } from './cruises.js'
+import { cruises, destinations, searchCruises } from './cruises.js'
 
 const searchQuerySchema = {
   type: 'object',
@@ -36,6 +36,10 @@ export function buildApp(opts: { logger?: boolean } = {}) {
       return reply.code(404).send({ message: 'Cruise not found' })
     }
     return cruise
+  })
+
+  app.get('/destinations', async () => {
+    return destinations
   })
 
   return app

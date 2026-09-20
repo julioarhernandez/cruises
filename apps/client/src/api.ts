@@ -1,4 +1,4 @@
-import type { Cruise } from '@cruises/shared'
+import type { Cruise, CruiseFilters } from '@cruises/shared'
 
 async function getJson<T>(url: string, signal?: AbortSignal): Promise<T> {
   const res = await fetch(url, { signal })
@@ -8,6 +8,15 @@ async function getJson<T>(url: string, signal?: AbortSignal): Promise<T> {
   return res.json()
 }
 
-export function fetchCruises(signal?: AbortSignal) {
-  return getJson<Cruise[]>('/api/cruises', signal)
+export function fetchCruises(filters: CruiseFilters, signal?: AbortSignal) {
+  const params = new URLSearchParams()
+  for (const [key, value] of Object.entries(filters)) {
+    if (value !== undefined && value !== '') params.set(key, String(value))
+  }
+  const query = params.toString()
+  return getJson<Cruise[]>(query ? `/api/cruises?${query}` : '/api/cruises', signal)
+}
+
+export function fetchDestinations(signal?: AbortSignal) {
+  return getJson<string[]>('/api/destinations', signal)
 }

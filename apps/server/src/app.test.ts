@@ -74,3 +74,13 @@ describe('GET /cruises/:id', () => {
     expect(res.json()).toEqual({ message: 'Cruise not found' })
   })
 })
+
+describe('GET /destinations', () => {
+  it('returns each destination once, sorted', async () => {
+    const res = await app.inject({ method: 'GET', url: '/destinations' })
+    const destinations = res.json<string[]>()
+
+    expect(destinations).toContain('Alaska')
+    expect(destinations).toEqual([...new Set(destinations)].sort())
+  })
+})

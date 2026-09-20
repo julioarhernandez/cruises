@@ -3,6 +3,8 @@ import data from '../data/cruises.json' with { type: 'json' }
 
 export const cruises: Cruise[] = data
 
+export const destinations = [...new Set(cruises.map((c) => c.destination))].sort()
+
 export function searchCruises(filters: CruiseFilters): Cruise[] {
   const q = filters.q?.trim().toLowerCase()
   const destination = filters.destination?.toLowerCase()
