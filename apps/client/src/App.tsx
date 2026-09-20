@@ -1,16 +1,18 @@
-import { useState } from 'react'
-import type { CruiseFilters } from '@cruises/shared'
-import CruiseList from './components/CruiseList'
-import SearchForm from './components/SearchForm'
+import { Link, Route, Routes } from 'react-router'
+import CruiseDetails from './pages/CruiseDetails'
+import SearchPage from './pages/SearchPage'
 
 export default function App() {
-  const [filters, setFilters] = useState<CruiseFilters>({})
-
   return (
     <main className="container">
-      <h1>Cruises</h1>
-      <SearchForm filters={filters} onChange={setFilters} />
-      <CruiseList filters={filters} />
+      <h1>
+        <Link to="/">Cruises</Link>
+      </h1>
+      <Routes>
+        <Route path="/" element={<SearchPage />} />
+        <Route path="/cruises/:id" element={<CruiseDetails />} />
+        <Route path="*" element={<p>Page not found.</p>} />
+      </Routes>
     </main>
   )
 }

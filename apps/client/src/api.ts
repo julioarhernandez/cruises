@@ -2,8 +2,11 @@ import type { Cruise, CruiseFilters } from '@cruises/shared'
 
 async function getJson<T>(url: string, signal?: AbortSignal): Promise<T> {
   const res = await fetch(url, { signal })
+  if (res.status === 404) {
+    throw new Error('Not found.')
+  }
   if (!res.ok) {
-    throw new Error(`Request failed with status ${res.status}`)
+    throw new Error(`Request failed with status ${res.status}.`)
   }
   return res.json()
 }
@@ -15,6 +18,10 @@ export function fetchCruises(filters: CruiseFilters, signal?: AbortSignal) {
   }
   const query = params.toString()
   return getJson<Cruise[]>(query ? `/api/cruises?${query}` : '/api/cruises', signal)
+}
+
+export function fetchCruise(id: string, signal?: AbortSignal) {
+  return getJson<Cruise>(`/api/cruises/${encodeURIComponent(id)}`, signal)
 }
 
 export function fetchDestinations(signal?: AbortSignal) {

@@ -93,3 +93,46 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+a {
+  color: #0b69a3;
+}
+
+h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card h2 a {
+  color: inherit;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.details {
+  background: white;
+  border: 1px solid #e4e7eb;
+  border-radius: 8px;
+  padding: 20px 24px;
+}
+
+.details h2 {
+  margin: 0 0 4px;
+}
+
+.details dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+}
+
+.details dt {
+  font-weight: 600;
+}
+
+.details dd {
+  margin: 0;
+}

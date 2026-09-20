@@ -1,11 +1,18 @@
+import { Link, useLocation } from 'react-router'
 import type { Cruise } from '@cruises/shared'
 import { formatDate, formatPrice } from '../format'
 
 export default function CruiseCard({ cruise }: { cruise: Cruise }) {
+  const location = useLocation()
+
   return (
     <article className="card">
       <div>
-        <h2>{cruise.name}</h2>
+        <h2>
+          <Link to={`/cruises/${cruise.id}`} state={{ search: location.search }}>
+            {cruise.name}
+          </Link>
+        </h2>
         <p className="muted">
           {cruise.cruiseLine} · {cruise.ship}
         </p>
