@@ -1,16 +1,27 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CruiseFilters } from '@cruises/shared'
 import { fetchDestinations } from '../api'
 
 const priceOptions = [500, 1000, 1500, 2000]
+const SEARCH_DELAY_MS = 300
 
 type Props = {
   filters: CruiseFilters
-  onChange: (filters: CruiseFilters) => void
+  onChange: (changes: Partial<CruiseFilters>) => void
 }
 
 export default function SearchForm({ filters, onChange }: Props) {
   const [destinations, setDestinations] = useState<string[]>([])
+  const [text, setText] = useState(filters.q ?? '')
+  const [lastQ, setLastQ] = useState(filters.q)
+  const searchTimer = useRef<number | undefined>(undefined)
+
+  // Keep the input in sync when the URL changes from outside the form,
+  // e.g. the back button or clicking the "Cruises" heading.
+  if (filters.q !== lastQ) {
+    setLastQ(filters.q)
+    setText(filters.q ?? '')
+  }
 
   useEffect(() => {
     const controller = new AbortController()
@@ -19,6 +30,14 @@ export default function SearchForm({ filters, onChange }: Props) {
     return () => controller.abort()
   }, [])
 
+  useEffect(() => () => clearTimeout(searchTimer.current), [])
+
+  function handleTextChange(value: string) {
+    setText(value)
+    clearTimeout(searchTimer.current)
+    searchTimer.current = window.setTimeout(() => onChange({ q: value }), SEARCH_DELAY_MS)
+  }
+
   return (
     <form className="search" role="search" onSubmit={(e) => e.preventDefault()}>
       <label>
@@ -26,8 +45,8 @@ export default function SearchForm({ filters, onChange }: Props) {
         <input
           type="search"
           placeholder="Port, ship, cruise line…"
-          value={filters.q ?? ''}
-          onChange={(e) => onChange({ ...filters, q: e.target.value })}
+          value={text}
+          onChange={(e) => handleTextChange(e.target.value)}
         />
       </label>
 
@@ -35,7 +54,7 @@ export default function SearchForm({ filters, onChange }: Props) {
         Destination
         <select
           value={filters.destination ?? ''}
-          onChange={(e) => onChange({ ...filters, destination: e.target.value || undefined })}
+          onChange={(e) => onChange({ destination: e.target.value })}
         >
           <option value="">Any</option>
           {destinations.map((d) => (
@@ -50,9 +69,7 @@ export default function SearchForm({ filters, onChange }: Props) {
         Max price
         <select
           value={filters.maxPrice ?? ''}
-          onChange={(e) =>
-            onChange({ ...filters, maxPrice: e.target.value ? Number(e.target.value) : undefined })
-          }
+          onChange={(e) => onChange({ maxPrice: e.target.value ? Number(e.target.value) : undefined })}
         >
           <option value="">Any</option>
           {priceOptions.map((p) => (

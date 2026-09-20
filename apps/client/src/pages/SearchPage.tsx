@@ -18,17 +18,25 @@ export default function SearchPage() {
     }
   }, [searchParams])
 
-  function handleChange(next: CruiseFilters) {
-    const params = new URLSearchParams()
-    if (next.q) params.set('q', next.q)
-    if (next.destination) params.set('destination', next.destination)
-    if (next.maxPrice) params.set('maxPrice', String(next.maxPrice))
-    setSearchParams(params, { replace: true })
+  // Merges into the current params so a delayed search update can't
+  // overwrite a dropdown that changed in the meantime.
+  function updateFilters(changes: Partial<CruiseFilters>) {
+    setSearchParams(
+      (current) => {
+        const params = new URLSearchParams(current)
+        for (const [key, value] of Object.entries(changes)) {
+          if (value === undefined || value === '') params.delete(key)
+          else params.set(key, String(value))
+        }
+        return params
+      },
+      { replace: true },
+    )
   }
 
   return (
     <>
-      <SearchForm filters={filters} onChange={handleChange} />
+      <SearchForm filters={filters} onChange={updateFilters} />
       <CruiseList filters={filters} />
     </>
   )

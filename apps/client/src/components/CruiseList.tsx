@@ -26,14 +26,15 @@ export default function CruiseList({ filters }: { filters: CruiseFilters }) {
   }, [filters])
 
   // The result belongs to an older search until the new request finishes.
+  // Keep showing it (dimmed) instead of flashing a loading message.
   const loading = result?.filters !== filters
 
-  if (loading) return <p>Loading cruises…</p>
+  if (!result) return <p>Loading cruises…</p>
   if (result.error) return <p role="alert">Could not load cruises. {result.error}</p>
   if (result.cruises.length === 0) return <p>No cruises match your search.</p>
 
   return (
-    <ul className="cruise-list">
+    <ul className="cruise-list" aria-busy={loading} style={{ opacity: loading ? 0.6 : 1 }}>
       {result.cruises.map((cruise) => (
         <li key={cruise.id}>
           <CruiseCard cruise={cruise} />

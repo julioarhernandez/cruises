@@ -96,6 +96,22 @@ describe('search page', () => {
     expect(fetchMock).toHaveBeenCalledWith('/api/cruises?destination=Alaska', expect.anything())
   })
 
+  it('waits for the user to stop typing before searching', async () => {
+    const user = userEvent.setup()
+    const fetchMock = mockApi()
+    renderApp()
+    await screen.findByText('Bahamas Weekend')
+    fetchMock.mockClear()
+
+    await user.type(screen.getByLabelText(/search/i), 'juneau')
+
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith('/api/cruises?q=juneau', expect.anything())
+    })
+    const searches = fetchMock.mock.calls.filter(([url]) => String(url).startsWith('/api/cruises'))
+    expect(searches).toHaveLength(1)
+  })
+
   it('reads filters from the URL', async () => {
     mockApi()
     renderApp('/?destination=Bahamas')
