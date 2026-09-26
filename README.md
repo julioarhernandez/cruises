@@ -1,6 +1,6 @@
 # Cruises
 
-A small cruise search app with an AI assistant. It's a learning project for React, Fastify, testing and LLM tool calling.
+A small cruise search app with an AI assistant made with React, Fastify, testing and LLM tool calling.
 
 - `apps/server`: Fastify API serving `data/cruises.json`, plus `POST /assistant` (Claude with a `searchCruises` tool)
 - `apps/client`: React + Vite UI (search, cruise details, assistant chat)
@@ -20,12 +20,12 @@ Everything except the assistant works without an API key.
 
 ## API
 
-| Method | Path | Notes |
-| --- | --- | --- |
-| GET | `/cruises` | Filters: `q`, `destination`, `maxPrice`, `minNights`, `maxNights`, `month` (YYYY-MM) |
-| GET | `/cruises/:id` | 404 if not found |
-| GET | `/destinations` | Unique destinations, sorted |
-| POST | `/assistant` | Body: `{ messages: [{ role, content }] }` → `{ reply, cruises }` |
+| Method | Path            | Notes                                                                                |
+| ------ | --------------- | ------------------------------------------------------------------------------------ |
+| GET    | `/cruises`      | Filters: `q`, `destination`, `maxPrice`, `minNights`, `maxNights`, `month` (YYYY-MM) |
+| GET    | `/cruises/:id`  | 404 if not found                                                                     |
+| GET    | `/destinations` | Unique destinations, sorted                                                          |
+| POST   | `/assistant`    | Body: `{ messages: [{ role, content }] }` → `{ reply, cruises }`                     |
 
 ## Tests
 
