@@ -32,6 +32,7 @@ const assistantBodySchema = {
           role: { enum: ['user', 'assistant'] },
           content: { type: 'string', minLength: 1, maxLength: 2000 },
         },
+        additionalProperties: false,
       },
     },
   },
@@ -74,8 +75,7 @@ export function buildApp({ logger = false, anthropic = new Anthropic() }: BuildO
     { schema: { body: assistantBodySchema } },
     async (request, reply) => {
       try {
-        const answer = await askAssistant(anthropic, request.body.messages)
-        return { reply: answer }
+        return await askAssistant(anthropic, request.body.messages)
       } catch (err) {
         request.log.error(err, 'assistant request failed')
         return reply.code(502).send({ message: 'The assistant is not available right now.' })

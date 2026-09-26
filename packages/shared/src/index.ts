@@ -28,4 +28,5 @@ export type ChatMessage = {
 
 export type AssistantReply = {
   reply: string
+  cruises: Cruise[]
 }

@@ -1,9 +1,12 @@
 import { useState, type FormEvent } from 'react'
-import type { ChatMessage } from '@cruises/shared'
+import type { ChatMessage, Cruise } from '@cruises/shared'
 import { askAssistant } from '../api'
+import CruiseCard from '../components/CruiseCard'
+
+type Turn = ChatMessage & { cruises?: Cruise[] }
 
 export default function AssistantPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [turns, setTurns] = useState<Turn[]>([])
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -13,18 +16,20 @@ export default function AssistantPage() {
     const text = input.trim()
     if (!text || sending) return
 
-    const conversation: ChatMessage[] = [...messages, { role: 'user', content: text }]
-    setMessages(conversation)
+    const conversation: Turn[] = [...turns, { role: 'user', content: text }]
+    setTurns(conversation)
     setInput('')
     setSending(true)
     setError(null)
 
     try {
-      const { reply } = await askAssistant(conversation)
-      setMessages([...conversation, { role: 'assistant', content: reply }])
+      const { reply, cruises } = await askAssistant(
+        conversation.map(({ role, content }) => ({ role, content })),
+      )
+      setTurns([...conversation, { role: 'assistant', content: reply, cruises }])
     } catch {
       // Put the question back so the user can just hit send again.
-      setMessages(messages)
+      setTurns(turns)
       setInput(text)
       setError('The assistant could not answer right now. Please try again.')
     } finally {
@@ -39,9 +44,18 @@ export default function AssistantPage() {
       </p>
 
       <ol className="messages">
-        {messages.map((message, i) => (
-          <li key={i} className={`message ${message.role}`}>
-            {message.content}
+        {turns.map((turn, i) => (
+          <li key={i} className={`message ${turn.role}`}>
+            {turn.content}
+            {turn.cruises && turn.cruises.length > 0 && (
+              <ul className="cruise-list suggestions">
+                {turn.cruises.map((cruise) => (
+                  <li key={cruise.id}>
+                    <CruiseCard cruise={cruise} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
         {sending && <li className="message assistant muted">Thinking…</li>}
