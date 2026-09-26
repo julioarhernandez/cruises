@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk'
 import Fastify from 'fastify'
-import type { CruiseFilters } from '@cruises/shared'
-import { askAssistant, type ChatMessage } from './assistant.js'
+import type { ChatMessage, CruiseFilters } from '@cruises/shared'
+import { askAssistant } from './assistant.js'
 import { cruises, destinations, searchCruises } from './cruises.js'
 
 const searchQuerySchema = {

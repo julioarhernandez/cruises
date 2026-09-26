@@ -20,3 +20,12 @@ export type CruiseFilters = {
   maxNights?: number
   month?: string
 }
+
+export type ChatMessage = {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+export type AssistantReply = {
+  reply: string
+}

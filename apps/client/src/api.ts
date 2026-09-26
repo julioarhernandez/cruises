@@ -1,7 +1,7 @@
-import type { Cruise, CruiseFilters } from '@cruises/shared'
+import type { AssistantReply, ChatMessage, Cruise, CruiseFilters } from '@cruises/shared'
 
-async function getJson<T>(url: string, signal?: AbortSignal): Promise<T> {
-  const res = await fetch(url, { signal })
+async function request<T>(url: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(url, init)
   if (res.status === 404) {
     throw new Error('Not found.')
   }
@@ -17,13 +17,21 @@ export function fetchCruises(filters: CruiseFilters, signal?: AbortSignal) {
     if (value !== undefined && value !== '') params.set(key, String(value))
   }
   const query = params.toString()
-  return getJson<Cruise[]>(query ? `/api/cruises?${query}` : '/api/cruises', signal)
+  return request<Cruise[]>(query ? `/api/cruises?${query}` : '/api/cruises', { signal })
 }
 
 export function fetchCruise(id: string, signal?: AbortSignal) {
-  return getJson<Cruise>(`/api/cruises/${encodeURIComponent(id)}`, signal)
+  return request<Cruise>(`/api/cruises/${encodeURIComponent(id)}`, { signal })
 }
 
 export function fetchDestinations(signal?: AbortSignal) {
-  return getJson<string[]>('/api/destinations', signal)
+  return request<string[]>('/api/destinations', { signal })
+}
+
+export function askAssistant(messages: ChatMessage[]) {
+  return request<AssistantReply>('/api/assistant', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ messages }),
+  })
 }

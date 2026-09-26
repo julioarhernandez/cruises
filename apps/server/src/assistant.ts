@@ -1,9 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
-
-export type ChatMessage = {
-  role: 'user' | 'assistant'
-  content: string
-}
+import type { ChatMessage } from '@cruises/shared'
 
 const MODEL = 'claude-opus-5-5'
 
