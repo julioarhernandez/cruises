@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router'
 import type { Cruise } from '@cruises/shared'
-import { fetchCruise } from '../api'
-import { formatDate, formatPrice } from '../format'
+import { fetchCruise } from '../lib/api'
+import { formatDate, formatPrice } from '../lib/format'
 
 export default function CruiseDetails() {
   const { id = '' } = useParams()

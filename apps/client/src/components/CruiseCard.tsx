@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router'
 import type { Cruise } from '@cruises/shared'
-import { formatDate, formatPrice } from '../format'
+import { formatDate, formatPrice } from '../lib/format'
 
 export default function CruiseCard({ cruise }: { cruise: Cruise }) {
   const location = useLocation()

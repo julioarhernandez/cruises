@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router'
 import type { CruiseFilters } from '@cruises/shared'
 import CruiseList from '../components/CruiseList'
 import SearchForm from '../components/SearchForm'
-import { useDebouncedValue } from '../useDebouncedValue'
+import { useDebouncedValue } from '../hooks/useDebouncedValue'
 
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams()

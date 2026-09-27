@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Cruise, CruiseFilters } from '@cruises/shared'
-import { fetchCruises } from '../api'
+import { fetchCruises } from '../lib/api'
 import CruiseCard from './CruiseCard'
 
 export default function CruiseList({ filters }: { filters: CruiseFilters }) {

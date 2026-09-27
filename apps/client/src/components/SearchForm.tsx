@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchDestinations } from '../api'
+import { fetchDestinations } from '../lib/api'
 
 const priceOptions = [500, 1000, 1500, 2000]
 

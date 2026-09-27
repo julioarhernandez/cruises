@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import type { ChatMessage, Cruise } from '@cruises/shared'
-import { askAssistant } from '../api'
+import { askAssistant } from '../lib/api'
 import CruiseCard from '../components/CruiseCard'
 
 type Turn = ChatMessage & { cruises?: Cruise[] }
