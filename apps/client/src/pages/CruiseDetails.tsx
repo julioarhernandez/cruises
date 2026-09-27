@@ -4,27 +4,29 @@ import type { Cruise } from '@cruises/shared'
 import { fetchCruise } from '../api'
 import { formatDate, formatPrice } from '../format'
 
-type Result = {
-  id: string
-  cruise?: Cruise
-  error?: string
-}
-
 export default function CruiseDetails() {
   const { id = '' } = useParams()
   const location = useLocation()
-  const [result, setResult] = useState<Result | null>(null)
+  const [cruise, setCruise] = useState<Cruise | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const controller = new AbortController()
 
-    fetchCruise(id, controller.signal)
-      .then((cruise) => setResult({ id, cruise }))
-      .catch((err) => {
-        if (controller.signal.aborted) return
-        setResult({ id, error: err.message })
-      })
+    async function load() {
+      setLoading(true)
+      setError(null)
+      try {
+        setCruise(await fetchCruise(id, controller.signal))
+      } catch (err) {
+        if (!controller.signal.aborted) setError((err as Error).message)
+      } finally {
+        if (!controller.signal.aborted) setLoading(false)
+      }
+    }
 
+    load()
     return () => controller.abort()
   }, [id])
 
@@ -34,17 +36,15 @@ export default function CruiseDetails() {
     </Link>
   )
 
-  if (result?.id !== id) return <p>Loading cruise…</p>
-  if (!result.cruise) {
+  if (loading) return <p>Loading cruise…</p>
+  if (error || !cruise) {
     return (
       <>
         {backLink}
-        <p role="alert">Could not load this cruise. {result.error}</p>
+        <p role="alert">Could not load this cruise. {error}</p>
       </>
     )
   }
-
-  const { cruise } = result
 
   return (
     <article className="details">

@@ -3,39 +3,41 @@ import type { Cruise, CruiseFilters } from '@cruises/shared'
 import { fetchCruises } from '../api'
 import CruiseCard from './CruiseCard'
 
-type Result = {
-  filters: CruiseFilters
-  cruises: Cruise[]
-  error?: string
-}
-
 export default function CruiseList({ filters }: { filters: CruiseFilters }) {
-  const [result, setResult] = useState<Result | null>(null)
+  const [cruises, setCruises] = useState<Cruise[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Aborting cancels the request if the filters change before it finishes,
+    // so an old, slow response can't overwrite a newer one.
     const controller = new AbortController()
 
-    fetchCruises(filters, controller.signal)
-      .then((cruises) => setResult({ filters, cruises }))
-      .catch((err) => {
-        if (controller.signal.aborted) return
-        setResult({ filters, cruises: [], error: err.message })
-      })
+    async function load() {
+      setLoading(true)
+      setError(null)
+      try {
+        setCruises(await fetchCruises(filters, controller.signal))
+      } catch (err) {
+        if (!controller.signal.aborted) setError((err as Error).message)
+      } finally {
+        if (!controller.signal.aborted) setLoading(false)
+      }
+    }
 
+    load()
     return () => controller.abort()
   }, [filters])
 
-  // The result belongs to an older search until the new request finishes.
-  // Keep showing it (dimmed) instead of flashing a loading message.
-  const loading = result?.filters !== filters
+  if (error) return <p role="alert">Could not load cruises. {error}</p>
+  if (loading && cruises.length === 0) return <p>Loading cruises…</p>
+  if (cruises.length === 0) return <p>No cruises match your search.</p>
 
-  if (!result) return <p>Loading cruises…</p>
-  if (result.error) return <p role="alert">Could not load cruises. {result.error}</p>
-  if (result.cruises.length === 0) return <p>No cruises match your search.</p>
-
+  // While a new search is loading, keep the previous results on screen (dimmed)
+  // instead of flashing a loading message.
   return (
     <ul className="cruise-list" aria-busy={loading} style={{ opacity: loading ? 0.6 : 1 }}>
-      {result.cruises.map((cruise) => (
+      {cruises.map((cruise) => (
         <li key={cruise.id}>
           <CruiseCard cruise={cruise} />
         </li>
