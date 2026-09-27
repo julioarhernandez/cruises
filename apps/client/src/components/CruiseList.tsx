@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import type { Cruise, CruiseFilters } from '@cruises/shared'
 import { fetchCruises } from '../lib/api'
@@ -37,11 +38,21 @@ export default function CruiseList({ filters }: { filters: CruiseFilters }) {
   // instead of flashing a loading message.
   return (
     <ul className="cruise-list" aria-busy={loading} style={{ opacity: loading ? 0.6 : 1 }}>
-      {cruises.map((cruise) => (
-        <li key={cruise.id}>
-          <CruiseCard cruise={cruise} />
-        </li>
-      ))}
+      {/* Cards fade in, fade out when filtered away, and the rest slide into place. */}
+      <AnimatePresence mode="popLayout">
+        {cruises.map((cruise, i) => (
+          <motion.li
+            key={cruise.id}
+            layout
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: i * 0.03 } }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.2 }}
+          >
+            <CruiseCard cruise={cruise} />
+          </motion.li>
+        ))}
+      </AnimatePresence>
     </ul>
   )
 }

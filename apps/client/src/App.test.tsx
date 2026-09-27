@@ -150,10 +150,10 @@ describe('theme', () => {
     mockApi()
     renderApp()
 
-    await user.click(screen.getByRole('button', { name: 'Dark mode' }))
+    await user.click(screen.getByRole('button', { name: 'Switch to dark mode' }))
 
     expect(document.documentElement.dataset.theme).toBe('dark')
     expect(localStorage.getItem('theme')).toBe('dark')
-    expect(screen.getByRole('button', { name: 'Light mode' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Switch to light mode' })).toBeInTheDocument()
   })
 })
