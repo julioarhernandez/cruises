@@ -1,4 +1,5 @@
 import { Link, NavLink, Route, Routes } from 'react-router'
+import ThemeToggle from './components/ThemeToggle'
 import AssistantPage from './pages/AssistantPage'
 import CruiseDetails from './pages/CruiseDetails'
 import SearchPage from './pages/SearchPage'
@@ -15,6 +16,7 @@ export default function App() {
             Search
           </NavLink>
           <NavLink to="/assistant">Ask the assistant</NavLink>
+          <ThemeToggle />
         </nav>
       </header>
       <Routes>

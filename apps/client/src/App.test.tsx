@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import type { Cruise } from '@cruises/shared'
 import App from './App'
+import ThemeProvider from './context/ThemeProvider'
 
 const alaska: Cruise = {
   id: 'alaska-7-seattle',
@@ -53,9 +54,11 @@ function mockApi(overrides: { cruises?: () => Response } = {}) {
 
 function renderApp(path = '/') {
   return render(
-    <MemoryRouter initialEntries={[path]}>
-      <App />
-    </MemoryRouter>,
+    <ThemeProvider>
+      <MemoryRouter initialEntries={[path]}>
+        <App />
+      </MemoryRouter>
+    </ThemeProvider>,
   )
 }
 
@@ -138,5 +141,19 @@ describe('cruise details', () => {
     renderApp('/cruises/nope')
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/not found/i)
+  })
+})
+
+describe('theme', () => {
+  it('switches to dark mode and remembers it', async () => {
+    const user = userEvent.setup()
+    mockApi()
+    renderApp()
+
+    await user.click(screen.getByRole('button', { name: 'Dark mode' }))
+
+    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(localStorage.getItem('theme')).toBe('dark')
+    expect(screen.getByRole('button', { name: 'Light mode' })).toBeInTheDocument()
   })
 })
