@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
@@ -94,8 +94,9 @@ describe('search page', () => {
 
     await user.selectOptions(screen.getByLabelText(/destination/i), 'Alaska')
 
-    expect(await screen.findByText('Alaska Inside Passage')).toBeInTheDocument()
-    expect(screen.queryByText('Bahamas Weekend')).not.toBeInTheDocument()
+    // Old results stay on screen while loading, so wait for the Bahamas card to go.
+    await waitFor(() => expect(screen.queryByText('Bahamas Weekend')).not.toBeInTheDocument())
+    expect(screen.getByText('Alaska Inside Passage')).toBeInTheDocument()
     expect(fetchMock).toHaveBeenCalledWith('/api/cruises?destination=Alaska', expect.anything())
   })
 
@@ -113,6 +114,28 @@ describe('search page', () => {
     })
     const searches = fetchMock.mock.calls.filter(([url]) => String(url).startsWith('/api/cruises'))
     expect(searches).toHaveLength(1)
+  })
+
+  it('shows 10 cruises per page and goes back to page 1 when a filter changes', async () => {
+    const user = userEvent.setup()
+    vi.stubGlobal('scrollTo', vi.fn())
+    const many = Array.from({ length: 12 }, (_, i) => ({ ...alaska, id: `cruise-${i + 1}`, name: `Cruise ${i + 1}` }))
+    mockApi({ cruises: () => jsonResponse(many) })
+    renderApp()
+
+    expect(await screen.findByText('Cruise 1')).toBeInTheDocument()
+    expect(screen.queryByText('Cruise 11')).not.toBeInTheDocument()
+    expect(screen.getByText('Page 1 of 2')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Next' }))
+
+    expect(screen.getByText('Cruise 11')).toBeInTheDocument()
+    expect(screen.queryByText('Cruise 1')).not.toBeInTheDocument()
+    expect(screen.getByText('Page 2 of 2')).toBeInTheDocument()
+
+    await user.selectOptions(screen.getByLabelText(/destination/i), 'Alaska')
+
+    expect(await screen.findByText('Page 1 of 2')).toBeInTheDocument()
   })
 
   it('reads filters from the URL', async () => {
