@@ -25,6 +25,9 @@
   line-height: 1.5;
   color: var(--text);
   background: var(--bg);
+  /* Always reserve space for the scrollbar so the layout doesn't jump
+     sideways when a page is short enough not to need one. */
+  scrollbar-gutter: stable;
 }
 
 * {
