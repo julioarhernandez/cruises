@@ -38,6 +38,10 @@ const assistantBodySchema = {
   },
 } as const
 
+// The cruise data only changes when we deploy a new cruises.json, so let the
+// browser reuse responses for a few minutes instead of asking again.
+const CACHE_FOR_5_MINUTES = 'public, max-age=300'
+
 type BuildOptions = {
   logger?: boolean
   anthropic?: Anthropic
@@ -53,7 +57,8 @@ export function buildApp({ logger = false, anthropic = new Anthropic() }: BuildO
   app.get<{ Querystring: CruiseFilters }>(
     '/cruises',
     { schema: { querystring: searchQuerySchema } },
-    async (request) => {
+    async (request, reply) => {
+      reply.header('cache-control', CACHE_FOR_5_MINUTES)
       return searchCruises(request.query)
     },
   )
@@ -63,10 +68,12 @@ export function buildApp({ logger = false, anthropic = new Anthropic() }: BuildO
     if (!cruise) {
       return reply.code(404).send({ message: 'Cruise not found' })
     }
+    reply.header('cache-control', CACHE_FOR_5_MINUTES)
     return cruise
   })
 
-  app.get('/destinations', async () => {
+  app.get('/destinations', async (_request, reply) => {
+    reply.header('cache-control', CACHE_FOR_5_MINUTES)
     return destinations
   })
 

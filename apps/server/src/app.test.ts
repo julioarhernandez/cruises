@@ -84,3 +84,18 @@ describe('GET /destinations', () => {
     expect(destinations).toEqual([...new Set(destinations)].sort())
   })
 })
+
+describe('caching', () => {
+  it('lets the browser cache successful reads', async () => {
+    for (const url of ['/cruises?destination=Alaska', '/cruises/hawaii-7-honolulu', '/destinations']) {
+      const res = await app.inject({ method: 'GET', url })
+      expect(res.headers['cache-control']).toBe('public, max-age=300')
+    }
+  })
+
+  it('does not cache a 404', async () => {
+    const res = await app.inject({ method: 'GET', url: '/cruises/does-not-exist' })
+
+    expect(res.headers['cache-control']).toBeUndefined()
+  })
+})
