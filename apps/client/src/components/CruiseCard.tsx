@@ -7,7 +7,8 @@ export default function CruiseCard({ cruise }: { cruise: Cruise }) {
 
   return (
     <article className="card">
-      <div>
+      <img className="card-image" src={cruise.image} alt="" width={640} height={360} loading="lazy" />
+      <div className="card-body">
         <h2>
           <Link to={`/cruises/${cruise.id}`} state={{ search: location.search }}>
             {cruise.name}

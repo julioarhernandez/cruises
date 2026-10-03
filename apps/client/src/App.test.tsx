@@ -18,6 +18,7 @@ const alaska: Cruise = {
   price: 1199,
   ports: ['Seattle', 'Juneau', 'Skagway'],
   description: 'Glaciers and whales.',
+  image: 'https://example.com/alaska.jpg',
 }
 
 const bahamas: Cruise = {

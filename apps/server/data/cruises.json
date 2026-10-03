@@ -10,7 +10,8 @@
     "nights": 7,
     "price": 899,
     "ports": ["Miami", "Cozumel", "Roatán", "Costa Maya", "Miami"],
-    "description": "A week of beaches and snorkeling in Mexico and Honduras aboard one of the largest ships at sea."
+    "description": "A week of beaches and snorkeling in Mexico and Honduras aboard one of the largest ships at sea.",
+    "image": "https://picsum.photos/seed/carib-7-miami/640/360"
   },
   {
     "id": "bahamas-4-ftl",
@@ -23,7 +24,8 @@
     "nights": 4,
     "price": 389,
     "ports": ["Fort Lauderdale", "Nassau", "Half Moon Cay", "Fort Lauderdale"],
-    "description": "A short escape with a day in Nassau and a private island stop."
+    "description": "A short escape with a day in Nassau and a private island stop.",
+    "image": "https://picsum.photos/seed/bahamas-4-ftl/640/360"
   },
   {
     "id": "east-carib-7-pc",
@@ -36,7 +38,8 @@
     "nights": 7,
     "price": 1049,
     "ports": ["Port Canaveral", "San Juan", "St. Thomas", "Tortola", "Port Canaveral"],
-    "description": "Island hopping through Puerto Rico and the Virgin Islands."
+    "description": "Island hopping through Puerto Rico and the Virgin Islands.",
+    "image": "https://picsum.photos/seed/east-carib-7-pc/640/360"
   },
   {
     "id": "alaska-7-seattle",
@@ -49,7 +52,8 @@
     "nights": 7,
     "price": 1199,
     "ports": ["Seattle", "Juneau", "Skagway", "Glacier Bay", "Ketchikan", "Victoria", "Seattle"],
-    "description": "Glaciers, whales and gold rush towns along the Inside Passage."
+    "description": "Glaciers, whales and gold rush towns along the Inside Passage.",
+    "image": "https://picsum.photos/seed/alaska-7-seattle/640/360"
   },
   {
     "id": "alaska-7-vancouver",
@@ -62,7 +66,8 @@
     "nights": 7,
     "price": 1349,
     "ports": ["Vancouver", "Ketchikan", "Juneau", "Skagway", "Hubbard Glacier", "Seward"],
-    "description": "One-way sailing from Vancouver to Seward with a full day at Hubbard Glacier."
+    "description": "One-way sailing from Vancouver to Seward with a full day at Hubbard Glacier.",
+    "image": "https://picsum.photos/seed/alaska-7-vancouver/640/360"
   },
   {
     "id": "med-10-barcelona",
@@ -75,7 +80,8 @@
     "nights": 10,
     "price": 1599,
     "ports": ["Barcelona", "Marseille", "Genoa", "Naples", "Messina", "Valletta", "Barcelona"],
-    "description": "Spain, France, Italy and Malta in ten days, with time for Pompeii and the Amalfi Coast."
+    "description": "Spain, France, Italy and Malta in ten days, with time for Pompeii and the Amalfi Coast.",
+    "image": "https://picsum.photos/seed/med-10-barcelona/640/360"
   },
   {
     "id": "greek-7-athens",
@@ -88,7 +94,8 @@
     "nights": 7,
     "price": 1899,
     "ports": ["Athens", "Mykonos", "Kuşadası", "Rhodes", "Santorini", "Athens"],
-    "description": "Whitewashed villages, ancient ruins and a stop in Ephesus."
+    "description": "Whitewashed villages, ancient ruins and a stop in Ephesus.",
+    "image": "https://picsum.photos/seed/greek-7-athens/640/360"
   },
   {
     "id": "fjords-7-southampton",
@@ -101,7 +108,8 @@
     "nights": 7,
     "price": 1129,
     "ports": ["Southampton", "Stavanger", "Olden", "Geiranger", "Bergen", "Southampton"],
-    "description": "Dramatic fjord scenery and waterfalls along Norway's west coast."
+    "description": "Dramatic fjord scenery and waterfalls along Norway's west coast.",
+    "image": "https://picsum.photos/seed/fjords-7-southampton/640/360"
   },
   {
     "id": "baltic-12-copenhagen",
@@ -114,7 +122,8 @@
     "nights": 12,
     "price": 2299,
     "ports": ["Copenhagen", "Berlin (Warnemünde)", "Tallinn", "Helsinki", "Stockholm", "Copenhagen"],
-    "description": "Five capitals in twelve days with overnights in Stockholm."
+    "description": "Five capitals in twelve days with overnights in Stockholm.",
+    "image": "https://picsum.photos/seed/baltic-12-copenhagen/640/360"
   },
   {
     "id": "mexico-5-la",
@@ -127,7 +136,8 @@
     "nights": 5,
     "price": 499,
     "ports": ["Los Angeles", "Catalina Island", "Ensenada", "Los Angeles"],
-    "description": "A quick Pacific run to Catalina and Ensenada."
+    "description": "A quick Pacific run to Catalina and Ensenada.",
+    "image": "https://picsum.photos/seed/mexico-5-la/640/360"
   },
   {
     "id": "mexico-7-sandiego",
@@ -140,7 +150,8 @@
     "nights": 7,
     "price": 849,
     "ports": ["San Diego", "Puerto Vallarta", "Mazatlán", "Cabo San Lucas", "San Diego"],
-    "description": "Winter sun on Mexico's Pacific coast."
+    "description": "Winter sun on Mexico's Pacific coast.",
+    "image": "https://picsum.photos/seed/mexico-7-sandiego/640/360"
   },
   {
     "id": "hawaii-7-honolulu",
@@ -153,7 +164,8 @@
     "nights": 7,
     "price": 1799,
     "ports": ["Honolulu", "Kahului", "Hilo", "Kona", "Nawiliwili", "Honolulu"],
-    "description": "Four islands in a week, with overnights in Maui and Kauai."
+    "description": "Four islands in a week, with overnights in Maui and Kauai.",
+    "image": "https://picsum.photos/seed/hawaii-7-honolulu/640/360"
   },
   {
     "id": "transatlantic-7-newyork",
@@ -166,7 +178,8 @@
     "nights": 7,
     "price": 1399,
     "ports": ["New York", "Southampton"],
-    "description": "The classic ocean crossing from New York to Southampton."
+    "description": "The classic ocean crossing from New York to Southampton.",
+    "image": "https://picsum.photos/seed/transatlantic-7-newyork/640/360"
   },
   {
     "id": "bahamas-3-pc",
@@ -179,7 +192,8 @@
     "nights": 3,
     "price": 329,
     "ports": ["Port Canaveral", "Nassau", "Perfect Day at CocoCay", "Port Canaveral"],
-    "description": "A three-night party weekend with a day at CocoCay."
+    "description": "A three-night party weekend with a day at CocoCay.",
+    "image": "https://picsum.photos/seed/bahamas-3-pc/640/360"
   },
   {
     "id": "southern-carib-10-sanjuan",
@@ -192,7 +206,8 @@
     "nights": 10,
     "price": 1649,
     "ports": ["San Juan", "St. Kitts", "Barbados", "St. Lucia", "Aruba", "Curaçao", "San Juan"],
-    "description": "Deep into the southern Caribbean, including the ABC islands."
+    "description": "Deep into the southern Caribbean, including the ABC islands.",
+    "image": "https://picsum.photos/seed/southern-carib-10-sanjuan/640/360"
   },
   {
     "id": "asia-12-singapore",
@@ -205,6 +220,7 @@
     "nights": 12,
     "price": 1999,
     "ports": ["Singapore", "Ho Chi Minh City", "Nha Trang", "Hong Kong", "Bangkok", "Singapore"],
-    "description": "Vietnam, Thailand and Hong Kong round trip from Singapore."
+    "description": "Vietnam, Thailand and Hong Kong round trip from Singapore.",
+    "image": "https://picsum.photos/seed/asia-12-singapore/640/360"
   }
 ]

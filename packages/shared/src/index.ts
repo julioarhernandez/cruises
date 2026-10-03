@@ -10,6 +10,7 @@ export type Cruise = {
   price: number
   ports: string[]
   description: string
+  image: string
 }
 
 export type CruiseFilters = {

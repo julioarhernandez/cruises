@@ -49,6 +49,7 @@ export default function CruiseDetails() {
   return (
     <article className="details">
       {backLink}
+      <img className="details-image" src={cruise.image} alt="" width={640} height={360} />
       <h2>{cruise.name}</h2>
       <p className="muted">
         {cruise.cruiseLine} · {cruise.ship}

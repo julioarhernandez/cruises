@@ -17,6 +17,7 @@ const hawaii: Cruise = {
   price: 1799,
   ports: ['Honolulu', 'Kahului'],
   description: 'Four islands in a week.',
+  image: 'https://example.com/hawaii.jpg',
 }
 
 function renderPage() {
