@@ -7,7 +7,9 @@ export default function CruiseCard({ cruise }: { cruise: Cruise }) {
 
   return (
     <article className="card">
-      <img className="card-image" src={cruise.image} alt="" width={640} height={360} loading="lazy" />
+      <figure className="card-figure">
+        <img className="card-image" src={cruise.image} alt="" width={640} height={360} loading="lazy" />
+      </figure>
       <div className="card-body">
         <h2>
           <Link to={`/cruises/${cruise.id}`} state={{ search: location.search }}>
@@ -20,10 +22,10 @@ export default function CruiseCard({ cruise }: { cruise: Cruise }) {
         <p>
           {cruise.nights} nights from {cruise.departurePort} · {formatDate(cruise.departureDate)}
         </p>
+        <p className="price">
+          from <strong>{formatPrice(cruise.price)}</strong>
+        </p>
       </div>
-      <p className="price">
-        from <strong>{formatPrice(cruise.price)}</strong>
-      </p>
     </article>
   )
 }

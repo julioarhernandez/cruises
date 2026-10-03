@@ -54,17 +54,40 @@ h1 {
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 12px;
+  gap: 24px;
 }
 
+/* Card: a large photo with the text box overlapping its right edge. */
 .card {
   display: flex;
   align-items: center;
-  gap: 16px;
+}
+
+.card-figure {
+  flex: 0 0 66.667%;
+  margin: 0;
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--border);
+}
+
+.card-body {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  margin-left: -20px;
   padding: 16px 20px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
 }
 
 .card h2 {
@@ -77,13 +100,24 @@ h1 {
 }
 
 .price {
-  white-space: nowrap;
-  text-align: right;
+  margin-top: 12px;
 }
 
 .price strong {
   display: block;
   font-size: 1.25rem;
+}
+
+/* On phones, stack the box under the photo, overlapping its bottom edge instead. */
+@media (max-width: 600px) {
+  .card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card-body {
+    margin: -20px 12px 0;
+  }
 }
 
 .search {
@@ -287,20 +321,6 @@ h1 a {
   cursor: default;
 }
 
-.card-image {
-  width: 160px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-  background: var(--border);
-}
-
-.card-body {
-  flex: 1;
-  min-width: 0;
-}
-
 .details-image {
   display: block;
   width: 100%;
@@ -310,16 +330,4 @@ h1 a {
   border-radius: 6px;
   margin-bottom: 16px;
   background: var(--border);
-}
-
-@media (max-width: 600px) {
-  .card {
-    flex-wrap: wrap;
-  }
-
-  .card-image {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-  }
 }
