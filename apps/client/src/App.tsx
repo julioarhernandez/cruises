@@ -1,8 +1,11 @@
+import { lazy, Suspense } from 'react'
 import { Link, NavLink, Route, Routes } from 'react-router'
 import ThemeToggle from './components/ThemeToggle'
-import AssistantPage from './pages/AssistantPage'
-import CruiseDetails from './pages/CruiseDetails'
-import SearchPage from './pages/SearchPage'
+
+// Each page is its own chunk, downloaded the first time someone visits it.
+const SearchPage = lazy(() => import('./pages/SearchPage'))
+const CruiseDetails = lazy(() => import('./pages/CruiseDetails'))
+const AssistantPage = lazy(() => import('./pages/AssistantPage'))
 
 export default function App() {
   return (
@@ -19,12 +22,14 @@ export default function App() {
           <ThemeToggle />
         </nav>
       </header>
-      <Routes>
-        <Route path="/" element={<SearchPage />} />
-        <Route path="/cruises/:id" element={<CruiseDetails />} />
-        <Route path="/assistant" element={<AssistantPage />} />
-        <Route path="*" element={<p>Page not found.</p>} />
-      </Routes>
+      <Suspense fallback={<p>Loading…</p>}>
+        <Routes>
+          <Route path="/" element={<SearchPage />} />
+          <Route path="/cruises/:id" element={<CruiseDetails />} />
+          <Route path="/assistant" element={<AssistantPage />} />
+          <Route path="*" element={<p>Page not found.</p>} />
+        </Routes>
+      </Suspense>
     </main>
   )
 }

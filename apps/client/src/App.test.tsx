@@ -35,7 +35,7 @@ function jsonResponse(body: unknown, status = 200) {
 }
 
 // A tiny fake API: answers based on the URL, like the real server would.
-function mockApi(overrides: { cruises?: () => Response } = {}) {
+function mockApi(overrides: { cruises?: () => Response | Promise<Response> } = {}) {
   const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
     const url = new URL(String(input), 'http://localhost')
 
@@ -65,10 +65,16 @@ function renderApp(path = '/') {
 
 describe('search page', () => {
   it('shows a loading message, then the cruises', async () => {
-    mockApi()
+    // Hold the response so the loading state stays on screen until we check it.
+    let respond = () => {}
+    mockApi({
+      cruises: () => new Promise((resolve) => (respond = () => resolve(jsonResponse([alaska, bahamas])))),
+    })
     renderApp()
 
-    expect(screen.getByText(/loading cruises/i)).toBeInTheDocument()
+    // The page itself is lazy-loaded, so wait for it to appear.
+    expect(await screen.findByText(/loading cruises/i)).toBeInTheDocument()
+    respond()
     expect(await screen.findByText('Alaska Inside Passage')).toBeInTheDocument()
     expect(screen.getByText('Bahamas Weekend')).toBeInTheDocument()
   })
