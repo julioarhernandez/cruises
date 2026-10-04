@@ -56,7 +56,7 @@ export default function CruiseCard({ cruise }: { cruise: Cruise }) {
         <p className="muted">
           {cruise.cruiseLine} · {cruise.ship}
         </p>
-        <p>
+        <p className="card-trip">
           {cruise.nights} nights from {cruise.departurePort} · {formatDate(cruise.departureDate)}
         </p>
         <p className="price">

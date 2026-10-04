@@ -102,6 +102,14 @@ h1 {
   margin: 0;
 }
 
+.card .card-trip {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
 .price {
   margin-top: 12px;
 }
