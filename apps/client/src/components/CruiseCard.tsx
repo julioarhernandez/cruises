@@ -23,6 +23,7 @@ export default function CruiseCard({ cruise }: { cruise: Cruise }) {
   // Hover and keyboard focus both "activate" the card. React's onFocus bubbles
   // up from the link inside, so tabbing to it gets the same effect as the mouse.
   const [active, setActive] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <motion.article
@@ -35,7 +36,7 @@ export default function CruiseCard({ cruise }: { cruise: Cruise }) {
       onFocus={() => setActive(true)}
       onBlur={() => setActive(false)}
     >
-      <figure className="card-figure">
+      <figure className={imageLoaded ? 'card-figure image-frame loaded' : 'card-figure image-frame'}>
         <motion.img
           className="card-image"
           src={cruise.image}
@@ -43,6 +44,9 @@ export default function CruiseCard({ cruise }: { cruise: Cruise }) {
           width={640}
           height={360}
           loading="lazy"
+          // On error, stop the loading pulse and leave the grey box.
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(true)}
           variants={imageVariants}
           transition={transition}
         />

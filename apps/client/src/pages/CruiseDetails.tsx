@@ -10,6 +10,7 @@ export default function CruiseDetails() {
   const [cruise, setCruise] = useState<Cruise | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -49,7 +50,17 @@ export default function CruiseDetails() {
   return (
     <article className="details">
       {backLink}
-      <img className="details-image" src={cruise.image} alt="" width={640} height={360} />
+      <figure className={imageLoaded ? 'details-figure image-frame loaded' : 'details-figure image-frame'}>
+        <img
+          className="details-image"
+          src={cruise.image}
+          alt=""
+          width={640}
+          height={360}
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageLoaded(true)}
+        />
+      </figure>
       <h2>{cruise.name}</h2>
       <p className="muted">
         {cruise.cruiseLine} · {cruise.ship}

@@ -79,7 +79,6 @@ h1 {
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  background: var(--border);
 }
 
 .card-body {
@@ -332,13 +331,52 @@ h1 a {
   cursor: default;
 }
 
+.details-figure {
+  margin: 0 0 16px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
 .details-image {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 16px;
+}
+
+/* Photo placeholder: a grey box that pulses while the photo downloads,
+   then the photo fades in once it has loaded. */
+.image-frame {
   background: var(--border);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.image-frame img {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-frame.loaded {
+  animation: none;
+}
+
+.image-frame.loaded img {
+  opacity: 1;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-frame {
+    animation: none;
+  }
+
+  .image-frame img {
+    transition: none;
+  }
 }
