@@ -110,12 +110,12 @@ h1 {
   color: var(--accent);
 }
 
-.price {
+.card .price {
   margin-top: 12px;
+  text-align: right;
 }
 
 .price strong {
-  display: block;
   font-size: 1.25rem;
 }
 
