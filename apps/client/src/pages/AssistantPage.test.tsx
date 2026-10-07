@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import type { Cruise } from '@cruises/shared'
+import { makeStore } from '../store'
 import AssistantPage from './AssistantPage'
 
 const hawaii: Cruise = {
@@ -22,9 +24,11 @@ const hawaii: Cruise = {
 
 function renderPage() {
   render(
-    <MemoryRouter>
-      <AssistantPage />
-    </MemoryRouter>,
+    <Provider store={makeStore()}>
+      <MemoryRouter>
+        <AssistantPage />
+      </MemoryRouter>
+    </Provider>,
   )
 }
 

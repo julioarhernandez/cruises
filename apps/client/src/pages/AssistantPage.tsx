@@ -1,39 +1,26 @@
 import { useState, type FormEvent } from 'react'
-import type { ChatMessage, Cruise } from '@cruises/shared'
-import { askAssistant } from '../lib/api'
 import CruiseCard from '../components/CruiseCard'
-
-type Turn = ChatMessage & { cruises?: Cruise[] }
+import { useAppDispatch, useAppSelector } from '../store'
+import { clearChat, sendMessage } from '../store/chatSlice'
 
 export default function AssistantPage() {
-  const [turns, setTurns] = useState<Turn[]>([])
+  const dispatch = useAppDispatch()
+  // The conversation lives in the Redux store, so it survives leaving this page.
+  const { turns, sending, error } = useAppSelector((state) => state.chat)
+  // What's being typed is just this page's business, so it stays local state.
   const [input, setInput] = useState('')
-  const [sending, setSending] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     const text = input.trim()
     if (!text || sending) return
 
-    const conversation: Turn[] = [...turns, { role: 'user', content: text }]
-    setTurns(conversation)
     setInput('')
-    setSending(true)
-    setError(null)
-
     try {
-      const { reply, cruises } = await askAssistant(
-        conversation.map(({ role, content }) => ({ role, content })),
-      )
-      setTurns([...conversation, { role: 'assistant', content: reply, cruises }])
+      await dispatch(sendMessage(text)).unwrap()
     } catch {
       // Put the question back so the user can just hit send again.
-      setTurns(turns)
       setInput(text)
-      setError('The assistant could not answer right now. Please try again.')
-    } finally {
-      setSending(false)
     }
   }
 
@@ -62,6 +49,12 @@ export default function AssistantPage() {
       </ol>
 
       {error && <p role="alert">{error}</p>}
+
+      {turns.length > 0 && !sending && (
+        <button type="button" className="link-button" onClick={() => dispatch(clearChat())}>
+          Clear chat
+        </button>
+      )}
 
       <form className="chat-form" onSubmit={handleSubmit}>
         <input

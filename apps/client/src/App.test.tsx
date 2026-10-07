@@ -1,10 +1,12 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import type { Cruise } from '@cruises/shared'
 import App from './App'
 import ThemeProvider from './context/ThemeProvider'
+import { makeStore } from './store'
 
 const alaska: Cruise = {
   id: 'alaska-7-seattle',
@@ -46,6 +48,7 @@ function mockApi(overrides: { cruises?: () => Response | Promise<Response> } = {
       return jsonResponse([alaska, bahamas].filter((c) => !destination || c.destination === destination))
     }
     if (url.pathname === `/api/cruises/${alaska.id}`) return jsonResponse(alaska)
+    if (url.pathname === '/api/assistant') return jsonResponse({ reply: 'Alaska is great in June.', cruises: [] })
     return jsonResponse({ message: 'Cruise not found' }, 404)
   })
 
@@ -55,11 +58,13 @@ function mockApi(overrides: { cruises?: () => Response | Promise<Response> } = {
 
 function renderApp(path = '/') {
   return render(
-    <ThemeProvider>
-      <MemoryRouter initialEntries={[path]}>
-        <App />
-      </MemoryRouter>
-    </ThemeProvider>,
+    <Provider store={makeStore()}>
+      <ThemeProvider>
+        <MemoryRouter initialEntries={[path]}>
+          <App />
+        </MemoryRouter>
+      </ThemeProvider>
+    </Provider>,
   )
 }
 
@@ -185,5 +190,24 @@ describe('theme', () => {
     expect(document.documentElement.dataset.theme).toBe('dark')
     expect(localStorage.getItem('theme')).toBe('dark')
     expect(screen.getByRole('button', { name: 'Switch to light mode' })).toBeInTheDocument()
+  })
+})
+
+describe('assistant', () => {
+  it('keeps the conversation after leaving the page and coming back', async () => {
+    const user = userEvent.setup()
+    mockApi()
+    renderApp('/assistant')
+
+    await user.type(await screen.findByLabelText('Message'), 'When should I go to Alaska?')
+    await user.click(screen.getByRole('button', { name: 'Send' }))
+    expect(await screen.findByText('Alaska is great in June.')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Search' }))
+    await screen.findByText('Alaska Inside Passage')
+    await user.click(screen.getByRole('link', { name: 'Ask the assistant' }))
+
+    expect(await screen.findByText('When should I go to Alaska?')).toBeInTheDocument()
+    expect(screen.getByText('Alaska is great in June.')).toBeInTheDocument()
   })
 })
