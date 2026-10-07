@@ -71,15 +71,16 @@ function renderApp(path = '/') {
 describe('search page', () => {
   it('shows a loading message, then the cruises', async () => {
     // Hold the response so the loading state stays on screen until we check it.
-    let respond = () => {}
-    mockApi({
-      cruises: () => new Promise((resolve) => (respond = () => resolve(jsonResponse([alaska, bahamas])))),
-    })
+    // The promise exists before fetch is called, so it doesn't matter whether
+    // the component has started the request yet when we release it.
+    let respond!: (response: Response) => void
+    const heldResponse = new Promise<Response>((resolve) => (respond = resolve))
+    mockApi({ cruises: () => heldResponse })
     renderApp()
 
     // The page itself is lazy-loaded, so wait for it to appear.
     expect(await screen.findByText(/loading cruises/i)).toBeInTheDocument()
-    respond()
+    respond(jsonResponse([alaska, bahamas]))
     expect(await screen.findByText('Alaska Inside Passage')).toBeInTheDocument()
     expect(screen.getByText('Bahamas Weekend')).toBeInTheDocument()
   })
