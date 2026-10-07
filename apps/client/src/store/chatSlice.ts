@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { ChatMessage, Cruise } from '@cruises/shared'
 import { askAssistant } from '../lib/api'
-import type { RootState } from '.'
 
 export type Turn = ChatMessage & { cruises?: Cruise[] }
 
@@ -17,14 +16,15 @@ const initialState: ChatState = {
   error: null,
 }
 
-const createAppAsyncThunk = createAsyncThunk.withTypes<{ state: RootState }>()
+type SendMessageArgs = {
+  history: Turn[]
+  question: string
+}
 
-export const sendMessage = createAppAsyncThunk('chat/sendMessage', async (_text: string, { getState }) => {
-  // `pending` below has already added the user's message, so the
-  // conversation in the store is exactly what we send.
-  const messages = getState().chat.turns.map(({ role, content }) => ({ role, content }))
-  return askAssistant(messages)
-})
+// Sends the conversation so far plus the new question, and resolves with the reply.
+export const sendMessage = createAsyncThunk('chat/sendMessage', ({ history, question }: SendMessageArgs) =>
+  askAssistant([...history.map(({ role, content }) => ({ role, content })), { role: 'user', content: question }]),
+)
 
 const chatSlice = createSlice({
   name: 'chat',
@@ -36,7 +36,7 @@ const chatSlice = createSlice({
     builder
       .addCase(sendMessage.pending, (state, action) => {
         // Immer lets us "mutate" here; Redux still gets a new immutable state.
-        state.turns.push({ role: 'user', content: action.meta.arg })
+        state.turns.push({ role: 'user', content: action.meta.arg.question })
         state.sending = true
         state.error = null
       })

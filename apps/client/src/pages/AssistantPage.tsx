@@ -17,7 +17,7 @@ export default function AssistantPage() {
 
     setInput('')
     try {
-      await dispatch(sendMessage(text)).unwrap()
+      await dispatch(sendMessage({ history: turns, question: text })).unwrap()
     } catch {
       // Put the question back so the user can just hit send again.
       setInput(text)
