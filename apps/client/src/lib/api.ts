@@ -1,5 +1,9 @@
 import type { AssistantReply, ChatMessage, Cruise, CruiseFilters } from '@cruises/shared'
 
+// In development Vite proxies /api to the local server. In production the
+// client is on GitHub Pages and the server on Render, so the build sets the URL.
+const API_URL = import.meta.env.VITE_API_URL || '/api'
+
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init)
   if (res.status === 404) {
@@ -17,19 +21,19 @@ export function fetchCruises(filters: CruiseFilters, signal?: AbortSignal) {
     if (value !== undefined && value !== '') params.set(key, String(value))
   }
   const query = params.toString()
-  return request<Cruise[]>(query ? `/api/cruises?${query}` : '/api/cruises', { signal })
+  return request<Cruise[]>(`${API_URL}/cruises${query ? `?${query}` : ''}`, { signal })
 }
 
 export function fetchCruise(id: string, signal?: AbortSignal) {
-  return request<Cruise>(`/api/cruises/${encodeURIComponent(id)}`, { signal })
+  return request<Cruise>(`${API_URL}/cruises/${encodeURIComponent(id)}`, { signal })
 }
 
 export function fetchDestinations(signal?: AbortSignal) {
-  return request<string[]>('/api/destinations', { signal })
+  return request<string[]>(`${API_URL}/destinations`, { signal })
 }
 
 export function askAssistant(messages: ChatMessage[]) {
-  return request<AssistantReply>('/api/assistant', {
+  return request<AssistantReply>(`${API_URL}/assistant`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ messages }),
@@ -38,5 +42,5 @@ export function askAssistant(messages: ChatMessage[]) {
 
 // Fire and forget: a sleeping server starts booting before the first real request.
 export function wakeServer() {
-  fetch('/api/health').catch(() => {})
+  fetch(`${API_URL}/health`).catch(() => {})
 }

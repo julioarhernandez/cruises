@@ -32,6 +32,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build -w apps/client
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
       - name: SPA fallback for deep links
         run: cp apps/client/dist/index.html apps/client/dist/404.html
       - uses: actions/configure-pages@v5
