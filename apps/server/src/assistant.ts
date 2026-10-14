@@ -6,7 +6,7 @@ type MessageParam = Anthropic.Beta.BetaMessageParam
 type ToolUseBlock = Anthropic.Beta.BetaToolUseBlock
 type ToolResultBlockParam = Anthropic.Beta.BetaToolResultBlockParam
 
-const MODEL = 'claude-opus-5-5'
+const MODEL = 'claude-sonnet-5-5'
 
 // Safety net so a confused model can't keep us looping (and spending) forever.
 const MAX_TOOL_ROUNDS = 5
