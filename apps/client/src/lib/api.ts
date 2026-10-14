@@ -35,3 +35,8 @@ export function askAssistant(messages: ChatMessage[]) {
     body: JSON.stringify({ messages }),
   })
 }
+
+// Fire and forget: a sleeping server starts booting before the first real request.
+export function wakeServer() {
+  fetch('/api/health').catch(() => {})
+}

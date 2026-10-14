@@ -6,7 +6,10 @@ import { BrowserRouter } from 'react-router'
 import './styles/index.css'
 import App from './App.tsx'
 import ThemeProvider from './context/ThemeProvider.tsx'
+import { wakeServer } from './lib/api'
 import { makeStore } from './store'
+
+wakeServer()
 
 const store = makeStore()
 
