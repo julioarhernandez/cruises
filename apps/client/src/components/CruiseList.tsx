@@ -17,6 +17,7 @@ export default function CruiseList({ filters, page, onPageChange }: Props) {
   const [cruises, setCruises] = useState<Cruise[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [slow, setSlow] = useState(false)
 
   useEffect(() => {
     // Aborting cancels the request if the filters change before it finishes,
@@ -39,8 +40,21 @@ export default function CruiseList({ filters, page, onPageChange }: Props) {
     return () => controller.abort()
   }, [filters])
 
+  // The free server sleeps when idle and takes up to a minute to wake up.
+  // If loading takes more than a few seconds, tell the user why.
+  useEffect(() => {
+    if (!loading) return
+    const timer = setTimeout(() => setSlow(true), 3000)
+    return () => {
+      clearTimeout(timer)
+      setSlow(false)
+    }
+  }, [loading])
+
   if (error) return <p role="alert">Could not load cruises. {error}</p>
-  if (loading && cruises.length === 0) return <p>Loading cruises…</p>
+  if (loading && cruises.length === 0) {
+    return <p>{slow ? 'Waking up the server… this can take up to a minute.' : 'Loading cruises…'}</p>
+  }
   if (cruises.length === 0) return <p>No cruises match your search.</p>
 
   // All results are already loaded (there are only a handful), so paginate on the client.

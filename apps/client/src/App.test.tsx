@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router'
@@ -83,6 +83,21 @@ describe('search page', () => {
     respond(jsonResponse([alaska, bahamas]))
     expect(await screen.findByText('Alaska Inside Passage')).toBeInTheDocument()
     expect(screen.getByText('Bahamas Weekend')).toBeInTheDocument()
+  })
+
+  it('says the server is waking up when loading is slow', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    try {
+      mockApi({ cruises: () => new Promise(() => {}) })
+      renderApp()
+      await screen.findByText(/loading cruises/i)
+
+      act(() => vi.advanceTimersByTime(3000))
+
+      expect(screen.getByText(/waking up the server/i)).toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('shows an error when the request fails', async () => {
