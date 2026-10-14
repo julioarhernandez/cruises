@@ -18,7 +18,8 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <ThemeProvider>
         <MotionConfig reducedMotion="user">
-          <BrowserRouter>
+          {/* On GitHub Pages the app lives under /cruises/, the same base Vite builds with. */}
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
             <App />
           </BrowserRouter>
         </MotionConfig>
