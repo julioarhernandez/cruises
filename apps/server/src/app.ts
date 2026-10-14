@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
+import cors from '@fastify/cors'
 import Fastify from 'fastify'
 import type { ChatMessage, CruiseFilters } from '@cruises/shared'
 import { askAssistant } from './assistant.js'
@@ -42,6 +43,10 @@ const assistantBodySchema = {
 // browser reuse responses for a few minutes instead of asking again.
 const CACHE_FOR_5_MINUTES = 'public, max-age=300'
 
+// The deployed client lives on GitHub Pages, a different domain from this API.
+// Locally it doesn't matter: the Vite proxy makes requests same-origin.
+const CLIENT_ORIGIN = 'https://julioarhernandez.github.io'
+
 type BuildOptions = {
   logger?: boolean
   anthropic?: Anthropic
@@ -49,6 +54,7 @@ type BuildOptions = {
 
 export function buildApp({ logger = false, anthropic = new Anthropic() }: BuildOptions = {}) {
   const app = Fastify({ logger })
+  app.register(cors, { origin: CLIENT_ORIGIN })
 
   app.get('/health', async () => {
     return { status: 'ok' }

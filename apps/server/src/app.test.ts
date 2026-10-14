@@ -99,3 +99,27 @@ describe('caching', () => {
     expect(res.headers['cache-control']).toBeUndefined()
   })
 })
+
+describe('CORS', () => {
+  it('allows the GitHub Pages client', async () => {
+    const res = await app.inject({
+      method: 'OPTIONS',
+      url: '/assistant',
+      headers: {
+        origin: 'https://julioarhernandez.github.io',
+        'access-control-request-method': 'POST',
+        'access-control-request-headers': 'content-type',
+      },
+    })
+
+    expect(res.statusCode).toBe(204)
+    expect(res.headers['access-control-allow-origin']).toBe('https://julioarhernandez.github.io')
+  })
+
+  it('does not allow other sites', async () => {
+    const res = await app.inject({ method: 'GET', url: '/health', headers: { origin: 'https://example.com' } })
+
+    // The header always names our client, so the browser blocks every other site.
+    expect(res.headers['access-control-allow-origin']).not.toBe('https://example.com')
+  })
+})
